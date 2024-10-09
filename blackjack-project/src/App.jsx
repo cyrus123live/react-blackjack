@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+// const requireCards = require.context('./assets/Cards', true, /\.svg$/);
+
 
 const suits = ['diamonds', 'hearts', 'clubs', 'spades'];
 const ranks = [...Array(9).keys()].map(i => i + 2).concat(['ace', 'jack', 'queen', 'king']);
@@ -27,6 +29,10 @@ const generateCard = (deck) => {
   deck.splice(card_index, 1);
   return card
   // return { rank, suit };
+};
+
+const generateCardImageName = (card) => {
+  return `/assets/Cards/${card[0]}_of_${card[1]}.svg`;  
 };
 
 const sumCards = (cards) => {
@@ -165,7 +171,10 @@ const Blackjack = () => {
       <h2>Your Cards</h2>
       <div>
         {playerCards.map((card, index) => (
-          <span key={index}>{card[0]} of {card[1]} </span>
+          <>
+            {/* <span key={index}>{card[0]} of {card[1]} </span> */}
+            <img style={{height: 100 + 'px'}} key={index} src={generateCardImageName(card)}  alt={`Card ${index}`} />
+          </>
         ))}
         <p>Sum: {sumCards(playerCards)}</p>
       </div>
@@ -176,12 +185,29 @@ const Blackjack = () => {
         {dealerCardShown ? (
           <>
             {dealerCards.map((card, index) => (
-              <span key={index}>{card[0]} of {card[1]} </span>
+              // Render each dealer card when the dealer's cards are shown
+              <img
+                style={{ height: '100px' }}
+                key={index}
+                src={generateCardImageName(card)}
+                alt={`Card ${index}`}
+              />
             ))}
             <p>Sum: {sumCards(dealerCards)}</p>
           </>
         ) : (
-          dealerCards.length > 0 && <><span>{dealerCards[0][0]} of {dealerCards[0][1]}</span> <p>Sum: {sumCards([dealerCards[0]])}</p></>
+          <>
+            {dealerCards.length > 0 && (
+              <>
+                <img
+                  style={{ height: '100px' }}
+                  src={generateCardImageName(dealerCards[0])}
+                  alt="Dealer's card"
+                />
+                <p>Sum: {sumCards([dealerCards[0]])}</p>
+              </>
+            )}
+          </>
         )}
       </div>
 
